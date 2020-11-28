@@ -23,7 +23,7 @@ $(EXENAME): output_msg $(OBJS)
 readFromFile.o: main.cpp algorithms.cpp
 	$(CXX) $(CXXFLAGS) main.cpp algorithms.cpp
 
-test: output_msg catch/catchmain.cpp tests/tests.cpp readFromFile.cpp
+test: output_msg catch/catchmain.cpp tests/tests.cpp
 	$(LD) catch/catchmain.cpp tests/tests.cpp algorithms.cpp $(LDFLAGS) -o test
 
 clean:

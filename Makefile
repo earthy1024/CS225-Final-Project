@@ -1,5 +1,5 @@
 EXENAME = finalproj
-OBJS = algorithms.o main.o
+OBJS = algorithms.o main.o graph.o
 
 CXX = clang++
 CXXFLAGS = $(CS225) -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -pedantic
@@ -20,11 +20,8 @@ output_msg: ; $(CLANG_VERSION_MSG)
 $(EXENAME): output_msg $(OBJS)
 	$(LD) $(OBJS) $(LDFLAGS) -o $(EXENAME)
 
-readFromFile.o: main.cpp algorithms.cpp
-	$(CXX) $(CXXFLAGS) main.cpp algorithms.cpp
-
 test: output_msg catch/catchmain.cpp tests/tests.cpp
-	$(LD) catch/catchmain.cpp tests/tests.cpp algorithms.cpp $(LDFLAGS) -o test
+	$(LD) catch/catchmain.cpp tests/tests.cpp algorithms.cpp graph.o $(LDFLAGS) -o test
 
 clean:
 	-rm -f *.o $(EXENAME) test

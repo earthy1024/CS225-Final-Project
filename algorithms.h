@@ -20,4 +20,4 @@ Graph BFS(Graph graph);
 
 void BFS(Graph & graph, Vertex v, std::map<Vertex, bool> & explored);
 
-Graph makeGraph();
+Graph makeGraph(std::string filename);

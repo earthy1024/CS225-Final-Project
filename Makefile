@@ -20,8 +20,8 @@ output_msg: ; $(CLANG_VERSION_MSG)
 $(EXENAME): output_msg $(OBJS)
 	$(LD) $(OBJS) $(LDFLAGS) -o $(EXENAME)
 
-test: output_msg catch/catchmain.cpp tests/tests.cpp
-	$(LD) catch/catchmain.cpp tests/tests.cpp algorithms.cpp graph.o $(LDFLAGS) -o test
+test: output_msg catch/catchmain.cpp tests/test.cpp
+	$(LD) catch/catchmain.cpp tests/test.cpp algorithms.cpp graph.o $(LDFLAGS) -o test
 
 clean:
 	-rm -f *.o $(EXENAME) test

@@ -39,3 +39,29 @@ void BFS(Graph & graph, Vertex v, std::map<Vertex, bool> & explored) {
         }
     }
 }
+
+Graph makeGraph(std::string filename) {
+    std::ifstream text(filename);
+    std::vector<std::string> out;
+
+    if (text.is_open()) {
+        std::istream_iterator<std::string> iter(text);
+        while (!text.eof()) {
+            out.push_back(*iter);
+            ++iter;
+        }
+    }
+    Graph g(false, true);
+    for (unsigned curr = 4; curr < out.size(); curr++) {
+        Vertex source = out[curr].substr(0, 1);
+        Vertex dest = out[curr].substr(4, 1);
+        if (!g.vertexExists(source)) {
+            g.insertVertex(source);
+        } else if (!g.vertexExists(dest)) {
+            g.insertVertex(dest);
+        }
+        g.insertEdge(source, dest);
+    }
+
+    return g;
+}

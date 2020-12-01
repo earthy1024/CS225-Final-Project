@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
-
+#include "readFromFile.hpp"
 
 std::string file_to_string(const std::string & filename) {
 	std::ifstream text(filename);

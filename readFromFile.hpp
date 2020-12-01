@@ -1,4 +1,5 @@
 #include <string>
+#include "readFromFile.cpp"
 
 // adapted from CS 225 Final Project AMA
 

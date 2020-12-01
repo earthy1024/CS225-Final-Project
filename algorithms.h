@@ -4,6 +4,9 @@
 #include <queue>
 #include <vector>
 #include <map>
+#include <iostream>
+#include <fstream>
+#include <string>
 
 /*
 class BFS {
@@ -16,3 +19,5 @@ class BFS {
 Graph BFS(Graph graph);
 
 void BFS(Graph & graph, Vertex v, std::map<Vertex, bool> & explored);
+
+Graph makeGraph();

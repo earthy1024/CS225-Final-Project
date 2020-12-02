@@ -24,7 +24,7 @@ void BFS(Graph & graph, Vertex v, std::map<Vertex, bool> & explored) {
     explored[v] = true;
     std::queue<Vertex> q;
     q.push(v);
-    
+    int a = 0;
     while (!q.empty()) {
         v = q.front();
         q.pop();

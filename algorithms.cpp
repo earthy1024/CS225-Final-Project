@@ -1,30 +1,33 @@
 #include "algorithms.h"
 #include <utility>
+#include <iostream>
 
 Graph BFS(Graph graph) {
     std::vector<Vertex> vertices = graph.getVertices();
     std::vector<Edge> edges = graph.getEdges();
     
-    std::map<Vertex, bool> vertexExplored;
+    std::unordered_map<Vertex, bool> vertexExplored;
     for (unsigned curr = 0; curr < vertices.size(); curr++) {
         vertexExplored.insert(std::make_pair(vertices[curr], false));
     }
     for (unsigned curr = 0; curr < edges.size(); curr++) {
         graph.setEdgeLabel(edges[curr].source, edges[curr].dest, "Unexplored");
     }
+    vector<std::unordered_map<Vertex, bool>> distances;
     for (unsigned curr = 0; curr < vertices.size(); curr++) {
         if (!vertexExplored[vertices[curr]]) {
+            
             BFS(graph, vertices[curr], vertexExplored);
         }
     }
     return graph;
 }
 
-void BFS(Graph & graph, Vertex v, std::map<Vertex, bool> & explored) {
+void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored) {
+    cout << v << endl;
     explored[v] = true;
     std::queue<Vertex> q;
     q.push(v);
-    int a = 0;
     while (!q.empty()) {
         v = q.front();
         q.pop();
@@ -34,6 +37,7 @@ void BFS(Graph & graph, Vertex v, std::map<Vertex, bool> & explored) {
                 explored[w] = true;
                 q.push(w);
             } else if (graph.getEdgeLabel(v, w) == "Unexplored") {
+                cout << w << endl;
                 graph.setEdgeLabel(v, w, "Cross");
             }
         }
@@ -52,9 +56,16 @@ Graph makeGraph(std::string filename) {
         }
     }
     Graph g(false, true);
-    for (unsigned curr = 4; curr < out.size(); curr++) {
-        Vertex source = out[curr].substr(0, 1);
-        Vertex dest = out[curr].substr(4, 1);
+    for (unsigned curr = 0; curr < out.size(); curr += 2) {
+        Vertex source = out[curr];
+        Vertex dest = out[curr+1];
+        if (curr == out.size()-3) {
+            dest = out[curr+2];
+            curr += 2;
+        }
+        
+        cout << source << endl;
+        cout << dest << endl;
         if (!g.vertexExists(source)) {
             g.insertVertex(source);
         } else if (!g.vertexExists(dest)) {

@@ -106,9 +106,9 @@ std::unordered_map<Vertex, double> PageRank(Graph graph) {
             } else {
                 matrix[row][col] = 0;
             }
-            cout << matrix[row][col] << " ";
+            
         }
-        cout << endl;
+        
     }
     std::vector<double> vect(vertices.size());
     for (auto & i : vect) {

@@ -128,4 +128,21 @@ TEST_CASE("PageRank") {
     REQUIRE(val == 0.35);
 }
 
+TEST_CASE("PageRank works with large data set") {
+    Graph myGraph = makeGraph("amazon0302small.txt");
+    std::unordered_map<Vertex, double> state = PageRank(myGraph);
+    double total = 0;
+    for (auto & curr : state) {
+        cout << curr.first << " significance: " << curr.second << endl;
+        total += curr.second;
+    }
+    cout << total << endl;
+    REQUIRE(true == true);
+}
 
+/*
+# Directed graph (each unordered pair of nodes is saved once): Amazon0302.txt 
+# Amazon product co-purchaisng network from March 02 2003
+# Nodes: 262111 Edges: 1234877
+# FromNodeId	ToNodeId
+*/

@@ -22,4 +22,5 @@ void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored, s
 
 Graph makeGraph(std::string filename);
 
-int BFS(Graph graph, Vertex v);
+std::unordered_map<Vertex, double> PageRank(Graph graph);
+

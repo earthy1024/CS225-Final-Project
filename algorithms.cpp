@@ -86,6 +86,56 @@ Graph makeGraph(std::string filename) {
     return g;
 }
 
-int BFS(Graph graph, Vertex v) {
-    return 0;
+std::unordered_map<Vertex, double> PageRank(Graph graph) {
+    std::unordered_map<int, Vertex> vertices;
+    int count = 0;
+    for (auto & v : graph.getVertices()) {
+        vertices[count] = v;
+        count++;
+    }
+    std::vector<std::vector<double>> matrix;
+    matrix.resize(vertices.size());
+    for (auto & row : matrix) {
+        row.resize(vertices.size());
+    }
+
+    for (unsigned row = 0; row < matrix.size(); row++) {
+        for (unsigned col = 0; col < matrix[row].size(); col++) {
+            if (graph.edgeExists(vertices[col], vertices[row])) {
+                matrix[row][col] = (double) 1/graph.getAdjacent(vertices[col]).size();
+            } else {
+                matrix[row][col] = 0;
+            }
+            cout << matrix[row][col] << " ";
+        }
+        cout << endl;
+    }
+    std::vector<double> vect(vertices.size());
+    for (auto & i : vect) {
+        i = (double) 1/vect.size();
+    }
+    std::vector<double> temp;
+    for (unsigned curr = 0; curr < 50; curr++) {
+        temp.clear();
+        temp.resize(vect.size());
+        for (auto & i : temp) {
+            i = 0;
+        }
+        for (unsigned row = 0; row < matrix.size(); row++) {
+            for (unsigned col = 0; col < matrix[row].size(); col++) {
+                temp[row] += matrix[row][col]*vect[col];
+            }
+            
+        }
+        vect = temp;
+        
+        
+    }
+
+    std::unordered_map<Vertex, double> steady_state;
+    for (unsigned curr = 0; curr < vect.size(); curr++) {
+        steady_state[vertices[curr]] = vect[curr];
+    }
+
+    return steady_state;
 }

@@ -16,8 +16,10 @@ class BFS {
 }
 */
 
-Graph BFS(Graph graph);
+std::unordered_map<Vertex, std::unordered_map<Vertex, int>> BFS(Graph graph);
 
-void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored);
+void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored, std::unordered_map<Vertex, int> & dist);
 
 Graph makeGraph(std::string filename);
+
+int BFS(Graph graph, Vertex v);

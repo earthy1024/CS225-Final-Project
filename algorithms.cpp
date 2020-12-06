@@ -2,29 +2,38 @@
 #include <utility>
 #include <iostream>
 
-Graph BFS(Graph graph) {
-    std::vector<Vertex> vertices = graph.getVertices();
-    std::vector<Edge> edges = graph.getEdges();
+std::unordered_map<Vertex, std::unordered_map<Vertex, int>> BFS(Graph graph) {
     
-    std::unordered_map<Vertex, bool> vertexExplored;
-    for (unsigned curr = 0; curr < vertices.size(); curr++) {
-        vertexExplored.insert(std::make_pair(vertices[curr], false));
-    }
-    for (unsigned curr = 0; curr < edges.size(); curr++) {
-        graph.setEdgeLabel(edges[curr].source, edges[curr].dest, "Unexplored");
-    }
-    vector<std::unordered_map<Vertex, bool>> distances;
-    for (unsigned curr = 0; curr < vertices.size(); curr++) {
-        if (!vertexExplored[vertices[curr]]) {
-            
-            BFS(graph, vertices[curr], vertexExplored);
+    std::unordered_map<Vertex, std::unordered_map<Vertex, int>> dists;
+    
+    for (Vertex v : graph.getVertices()) {
+        std::vector<Vertex> vertices = graph.getVertices();
+        std::vector<Edge> edges = graph.getEdges();
+        
+        std::unordered_map<Vertex, bool> vertexExplored;
+        for (unsigned curr = 0; curr < vertices.size(); curr++) {
+            vertexExplored.insert(std::make_pair(vertices[curr], false));
         }
+        for (unsigned curr = 0; curr < edges.size(); curr++) {
+            graph.setEdgeLabel(edges[curr].source, edges[curr].dest, "Unexplored");
+        }
+        std::unordered_map<Vertex, int> distances;
+        distances[v] = 0;
+        BFS(graph, v, vertexExplored, distances);
+        for (unsigned curr = 0; curr < vertices.size(); curr++) {
+            if (!vertexExplored[vertices[curr]] && vertices[curr] == v) {
+                
+                BFS(graph, vertices[curr], vertexExplored, distances);
+            }
+        }
+        dists[v] = distances;
     }
-    return graph;
+    
+    return dists;
+    
 }
 
-void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored) {
-    cout << v << endl;
+void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored, std::unordered_map<Vertex, int> & dist) {
     explored[v] = true;
     std::queue<Vertex> q;
     q.push(v);
@@ -36,8 +45,8 @@ void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored) {
                 graph.setEdgeLabel(v, w, "Discovery");
                 explored[w] = true;
                 q.push(w);
+                dist[w] = dist[v] + 1;
             } else if (graph.getEdgeLabel(v, w) == "Unexplored") {
-                cout << w << endl;
                 graph.setEdgeLabel(v, w, "Cross");
             }
         }
@@ -64,8 +73,8 @@ Graph makeGraph(std::string filename) {
             curr += 2;
         }
         
-        cout << source << endl;
-        cout << dest << endl;
+        //cout << source << endl;
+        //cout << dest << endl;
         if (!g.vertexExists(source)) {
             g.insertVertex(source);
         } else if (!g.vertexExists(dest)) {
@@ -75,4 +84,8 @@ Graph makeGraph(std::string filename) {
     }
 
     return g;
+}
+
+int BFS(Graph graph, Vertex v) {
+    return 0;
 }

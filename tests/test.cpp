@@ -43,8 +43,9 @@ TEST_CASE("BFS is correct with undirected graph", "[weight=1]") {
 
 TEST_CASE("Checks makeGraph works correctly", "[weight=1]") {
     Graph myGraph = makeGraph("smallgraphfile.txt");
-    //myGraph.print();
-    REQUIRE(true == true);
+    myGraph.print();
+    REQUIRE(myGraph.vertexExists("0"));
+    REQUIRE(myGraph.edgeExists("2", "5"));
 }
 
 TEST_CASE("BFS works with directed graph") {
@@ -64,18 +65,20 @@ TEST_CASE("BFS works with directed graph") {
     myGraph.insertEdge("E", "B");
 
     std::unordered_map<Vertex, std::unordered_map<Vertex, int>> traversal = BFS(myGraph);
+    /*
     for (auto & one : traversal) {
         for (auto & two : one.second) {
             cout << one.first << "->" << two.first << " = " << two.second << endl;;
         }
     }
-    
     cout << endl;
+    */
     REQUIRE(traversal["A"]["E"] == 1);
     REQUIRE(traversal["B"]["E"] == 2);
     REQUIRE(traversal["D"]["C"] == 3);
 }
 
+/*
 TEST_CASE("PageRank gets a steady state", "[weight=1]") {
     Graph myGraph(false, true);
     string alphabet = "ABCDE";
@@ -99,6 +102,7 @@ TEST_CASE("PageRank gets a steady state", "[weight=1]") {
     REQUIRE(true == true);
 
 }
+*/
 
 TEST_CASE("PageRank") {
     
@@ -121,7 +125,7 @@ TEST_CASE("PageRank") {
 
     std::unordered_map<Vertex, double> state = PageRank(myGraph);
     for (auto & curr : state) {
-        cout << curr.first << " significance: " << curr.second << endl;
+        //cout << curr.first << " significance: " << curr.second << endl;
     }
     double num = (int) (state["A"] * 100 + 0.5);
     double val = (double) num / 100;
@@ -133,12 +137,79 @@ TEST_CASE("PageRank works with large data set") {
     std::unordered_map<Vertex, double> state = PageRank(myGraph);
     double total = 0;
     for (auto & curr : state) {
-        cout << curr.first << " significance: " << curr.second << endl;
+        //cout << curr.first << " significance: " << curr.second << endl;
         total += curr.second;
     }
-    cout << total << endl;
+    //cout << total << endl;
+    // myGraph.print();
     REQUIRE(true == true);
 }
+
+TEST_CASE("Tranpose works") {
+    Graph myGraph(false, true);
+    myGraph.insertVertex("A");
+    myGraph.insertVertex("B");
+    myGraph.insertVertex("C");
+    myGraph.insertVertex("D");
+    myGraph.insertEdge("A", "B");
+    myGraph.insertEdge("B", "C");
+    myGraph.insertEdge("C", "D");
+    myGraph.insertEdge("D", "A");
+    Edge one = myGraph.getEdge("A", "B");
+    REQUIRE(one.source == "A");
+    myGraph = GraphTranspose(myGraph);
+    
+    Edge two = myGraph.getEdge("B", "A");
+    REQUIRE(two.source != "A");
+    
+}
+
+TEST_CASE("SCC finds correct components") {
+    Graph myGraph(false, true);
+    myGraph.insertVertex("0");
+    myGraph.insertVertex("1");
+    myGraph.insertVertex("2");
+    myGraph.insertVertex("3");
+    myGraph.insertVertex("4");
+    myGraph.insertEdge("1", "0");
+    myGraph.insertEdge("0", "2");
+    myGraph.insertEdge("2", "1");
+    myGraph.insertEdge("0", "3");
+    myGraph.insertEdge("3", "4");
+    std::vector<std::vector<Vertex>> components = SCC(myGraph);
+    
+    REQUIRE(components.size() == 3);
+    
+}
+
+TEST_CASE("SCC works for medium sized graph") {
+    Graph myGraph(false,true);
+
+     myGraph.insertVertex("0");
+     myGraph.insertVertex("1");
+     myGraph.insertVertex("2");
+     myGraph.insertVertex("3");
+     myGraph.insertVertex("4");
+     myGraph.insertVertex("5");
+     myGraph.insertVertex("6");
+     myGraph.insertVertex("7");
+     myGraph.insertEdge("0","1");
+     myGraph.insertEdge("1","2");
+     myGraph.insertEdge("2","3");
+     myGraph.insertEdge("3","0");
+     myGraph.insertEdge("2","4");
+     myGraph.insertEdge("4","5");
+     myGraph.insertEdge("5","6");
+     myGraph.insertEdge("6","4");
+     myGraph.insertEdge("6","7");
+
+    std::vector<std::vector<Vertex>> components = SCC(myGraph);
+
+    REQUIRE(components.size()==3);
+
+}
+
+
 
 /*
 # Directed graph (each unordered pair of nodes is saved once): Amazon0302.txt 

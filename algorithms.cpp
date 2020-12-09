@@ -1,6 +1,7 @@
 #include "algorithms.h"
 #include <utility>
 #include <iostream>
+#include <stack>
 
 std::unordered_map<Vertex, std::unordered_map<Vertex, int>> BFS(Graph graph) {
     
@@ -54,6 +55,7 @@ void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored, s
 }
 
 Graph makeGraph(std::string filename) {
+    
     std::ifstream text(filename);
     std::vector<std::string> out;
 
@@ -63,8 +65,11 @@ Graph makeGraph(std::string filename) {
             out.push_back(*iter);
             ++iter;
         }
+        out.push_back(*iter);
     }
     Graph g(false, true);
+    
+    
     for (unsigned curr = 0; curr < out.size(); curr += 2) {
         Vertex source = out[curr];
         Vertex dest = out[curr+1];
@@ -73,8 +78,6 @@ Graph makeGraph(std::string filename) {
             curr += 2;
         }
         
-        //cout << source << endl;
-        //cout << dest << endl;
         if (!g.vertexExists(source)) {
             g.insertVertex(source);
         } else if (!g.vertexExists(dest)) {
@@ -84,6 +87,7 @@ Graph makeGraph(std::string filename) {
     }
 
     return g;
+    
 }
 
 std::unordered_map<Vertex, double> PageRank(Graph graph) {
@@ -93,6 +97,7 @@ std::unordered_map<Vertex, double> PageRank(Graph graph) {
         vertices[count] = v;
         count++;
     }
+
     std::vector<std::vector<double>> matrix;
     matrix.resize(vertices.size());
     for (auto & row : matrix) {
@@ -105,11 +110,10 @@ std::unordered_map<Vertex, double> PageRank(Graph graph) {
                 matrix[row][col] = (double) 1/graph.getAdjacent(vertices[col]).size();
             } else {
                 matrix[row][col] = 0;
-            }
-            
+            }   
         }
-        
     }
+
     std::vector<double> vect(vertices.size());
     for (auto & i : vect) {
         i = (double) 1/vect.size();
@@ -128,14 +132,76 @@ std::unordered_map<Vertex, double> PageRank(Graph graph) {
             
         }
         vect = temp;
-        
-        
     }
 
     std::unordered_map<Vertex, double> steady_state;
     for (unsigned curr = 0; curr < vect.size(); curr++) {
         steady_state[vertices[curr]] = vect[curr];
     }
-
+    
     return steady_state;
+}
+
+void fillStack(Graph & g, Vertex v, std::unordered_map<Vertex, bool> & visited, std::stack<Vertex> & st) {
+
+    visited[v] = true;
+    for (auto & adj : g.getAdjacent(v)) {
+        if (!visited[adj]) {
+            fillStack(g, adj, visited, st);
+        }
+    }
+    st.push(v);
+}
+
+std::vector<std::vector<Vertex>> SCC(Graph graph) {
+    std::vector<std::vector<Vertex>> components;
+    std::stack<Vertex> st;
+
+    std::unordered_map<Vertex, bool> visited;
+    for (auto & v : graph.getVertices()) {
+        visited[v] = false;
+    }
+
+    for (auto & v : graph.getVertices()) {
+        if (!visited[v]) {
+            fillStack(graph, v, visited, st);
+        }
+    }
+
+    graph = GraphTranspose(graph);
+
+    for (auto & v : graph.getVertices()) {
+        visited[v] = false;
+    }
+
+    while (!st.empty()) {
+        Vertex curr = st.top();
+        st.pop();
+        if (!visited[curr]) {
+            std::vector<Vertex> currComponent;
+            SCC_Helper(graph, curr, visited, currComponent);
+            components.push_back(currComponent);
+        }  
+    }
+
+    return components;
+}
+
+void SCC_Helper(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & visited, std::vector<Vertex> & component) {
+    visited[v] = true;
+    component.push_back(v);
+    for (auto & adj : graph.getAdjacent(v)) {
+        if (!visited[adj]) {
+            SCC_Helper(graph, adj, visited, component);
+        }
+    }
+
+}
+
+Graph GraphTranspose(Graph graph) {
+    for (auto & e : graph.getEdges()) {
+        graph.insertEdge(e.dest, e.source);
+        graph.removeEdge(e.source, e.dest);
+    }
+    return graph;
 }

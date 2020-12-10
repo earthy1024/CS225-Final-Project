@@ -23,11 +23,11 @@ void BFS(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & explored, s
 
 Graph makeGraph(std::string filename);
 
-std::unordered_map<Vertex, double> PageRank(Graph graph);
+std::unordered_map<Vertex, double> PageRank(const Graph & graph);
 
 std::vector<std::vector<Vertex>> SCC(Graph graph);
 
-Graph GraphTranspose(Graph graph);
+void GraphTranspose(Graph & graph);
 
-void SCC_Helper(Graph & graph, Vertex v, std::unordered_map<Vertex, bool> & visited, std::vector<Vertex> & component);
+void SCC_Helper(Graph & graph, const Vertex & v, std::unordered_map<Vertex, bool> & visited, std::vector<Vertex> & component);
 

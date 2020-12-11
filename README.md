@@ -2,7 +2,9 @@
 Final Project
 Link to full dataset: http://snap.stanford.edu/data/amazon0302.html
 The above dataset can only be used on a linux terminal. To unzip the file using the command "gzip -d 'filename'" in the command line.
-
+--
+To import the file from Windows, go into the directory of the file in Windows, and use the scp protocol to send it into your linux directory.
+--
 # Build
 The project has only been tested on linux, it may not work on Windows.
 --

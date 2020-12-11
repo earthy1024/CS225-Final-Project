@@ -157,7 +157,7 @@ TEST_CASE("Tranpose works") {
     myGraph.insertEdge("D", "A");
     Edge one = myGraph.getEdge("A", "B");
     REQUIRE(one.source == "A");
-    myGraph = GraphTranspose(myGraph);
+    GraphTranspose(myGraph);
     
     Edge two = myGraph.getEdge("B", "A");
     REQUIRE(two.source != "A");
